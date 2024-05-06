@@ -47,10 +47,43 @@
         button:hover {
             background-color: #0056b3;
         }
-    </style>
+        .instructions {
+        position: absolute;
+        top: 10px;
+        width: 80vw;
+        font-size: x-small;
+        background-color: #f9f9f9;
+        border-left: 6px solid #007bff;
+        margin-bottom: 20px;
+        padding: 10px 20px;
+    }
+</style>
 </head>
-
 <body>
+
+    <div class="instructions">
+        <h2>This tool matches onlyoffice.eu URLs and redirects us to the corresponding office.wcrp-cmip.org.</h2>
+        <p></p>
+        <p></p>
+        <p> On redirect, the updated URL
+             is copied to the clipboard. Please use this to update the original link if possible. </p>
+             <br>
+        <code> 
+            API Usage:
+            <br><br>
+                redirect.wcrp-cmip.org/url?<b>insert_url_here</b>
+
+            <br><br><br>
+
+            Alternatively, enter the `fileID` or onlyoffice.eu link in the cell below. 
+
+
+            
+        </code>
+    
+    </div>
+
+<br><br>
 
     <script>
         // Function to parse URL parameters
@@ -87,12 +120,9 @@
                 });
         }
 
-        // Main function to handle URL parameters
-        function main() {
-            var url = getUrlParameter('url');
-            var fileId = '';
-            if (url) {
-                var fileIdIndex = url.indexOf('fileid=');
+
+        function parseURL(url){
+            var fileIdIndex = url.indexOf('fileid=');
                 if (fileIdIndex !== -1) {
                     fileId = url.substring(fileIdIndex + 7);
 
@@ -102,6 +132,15 @@
                 } else {
                     console.error('File ID not found in URL');
                 }
+        }
+
+
+        // Main function to handle URL parameters
+        function main() {
+            var url = getUrlParameter('url');
+            var fileId = '';
+            if (url) {
+                parseURL(url)
             
             } else {
                 // Create input form
@@ -114,7 +153,15 @@
                     event.preventDefault();
                     var input = document.getElementById('idInput');
                     var id = input.value;
-                    fetchData(id);
+
+                    if (id.includes('onlyoffice.eu')){
+                        parseURL(id)
+                    } else if (!isNaN(parseInt(id))) {
+                        fetchData(id);
+                    } else {
+                        alert(`Entry "${id}" is not a valid url or integer link. Please try again`)
+                    }
+
                 });
             }
         }
