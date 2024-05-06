@@ -47,18 +47,20 @@
         button:hover {
             background-color: #0056b3;
         }
+
         .instructions {
-        position: absolute;
-        top: 10px;
-        width: 80vw;
-        font-size: x-small;
-        background-color: #f9f9f9;
-        border-left: 6px solid #007bff;
-        margin-bottom: 20px;
-        padding: 10px 20px;
-    }
-</style>
+            position: absolute;
+            top: 10px;
+            width: 80vw;
+            font-size: x-small;
+            background-color: #f9f9f9;
+            border-left: 6px solid #007bff;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+        }
+    </style>
 </head>
+
 <body>
 
     <div class="instructions">
@@ -66,9 +68,9 @@
         <p></p>
         <p></p>
         <p> On redirect, the updated URL
-             is copied to the clipboard. Please use this to update the original link if possible. </p>
-             <br>
-        <code> 
+            is copied to the clipboard. Please use this to update the original link if possible. </p>
+        <br>
+        <code>
             API Usage:
             <br><br>
                 redirect.wcrp-cmip.org/url?<b>insert_url_here</b>
@@ -80,10 +82,10 @@
 
             
         </code>
-    
+
     </div>
 
-<br><br>
+    <br><br>
 
     <script>
         // Function to parse URL parameters
@@ -95,8 +97,8 @@
         };
 
         // Function to fetch data from the API
-        function fetchData(id) {
-            fetch(`mapping/${id}.json`)
+        async function fetchData(id) {
+            await fetch(`mapping/${id}.json`)
                 .then(response => response.json())
                 .then(data => {
                     // Extract new_id from response
@@ -116,22 +118,22 @@
                 })
                 .catch(error => {
                     console.error('Error fetching data:', error);
-                    alert(`File id: ${id} not found. Please check your link and try again.` );
+                    alert(`File id: ${id} not found. Please check your link and try again.`);
                 });
         }
 
 
-        function parseURL(url){
+        async function parseURL(url) {
             var fileIdIndex = url.indexOf('fileid=');
-                if (fileIdIndex !== -1) {
-                    fileId = url.substring(fileIdIndex + 7);
+            if (fileIdIndex !== -1) {
+                fileId = url.substring(fileIdIndex + 7);
 
-                    console.warn(fileId)
+                console.warn(fileId)
 
-                    fetchData(fileId);
-                } else {
-                    console.error('File ID not found in URL');
-                }
+                await fetchData(fileId);
+            } else {
+                console.error('File ID not found in URL');
+            }
         }
 
 
@@ -140,8 +142,8 @@
             var url = getUrlParameter('url');
             var fileId = '';
             if (url) {
-                parseURL(url)
-            
+                parseURL(url).then(d=>d)
+
             } else {
                 // Create input form
                 var form = document.createElement('form');
@@ -154,10 +156,10 @@
                     var input = document.getElementById('idInput');
                     var id = input.value;
 
-                    if (id.includes('onlyoffice.eu')){
-                        parseURL(id)
+                    if (id.includes('onlyoffice.eu')) {
+                        parseURL(id).then(d=>d)
                     } else if (!isNaN(parseInt(id))) {
-                        fetchData(id);
+                        fetchData(id).then(d=>d);
                     } else {
                         alert(`Entry "${id}" is not a valid url or integer link. Please try again`)
                     }
