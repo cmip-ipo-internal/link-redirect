@@ -107,6 +107,8 @@
                     // Create new URL with new_id
                     var newUrl = 'https://office.wcrp-cmip.org/Products/Files/DocEditor.aspx?fileid=' + newId;
                     // Copy new URL to clipboard
+
+
                     navigator.clipboard.writeText(newUrl)
                         .then(() => {
                             // Redirect to new URL
@@ -142,7 +144,7 @@
             var url = getUrlParameter('url');
             var fileId = '';
             if (url) {
-                parseURL(url).then(d=>d)
+                parseURL(url).then(d => d)
 
             } else {
                 // Create input form
@@ -157,9 +159,9 @@
                     var id = input.value;
 
                     if (id.includes('onlyoffice.eu')) {
-                        parseURL(id).then(d=>d)
+                        parseURL(id).then(d => d)
                     } else if (!isNaN(parseInt(id))) {
-                        fetchData(id).then(d=>d);
+                        fetchData(id).then(d => d);
                     } else {
                         alert(`Entry "${id}" is not a valid url or integer link. Please try again`)
                     }
